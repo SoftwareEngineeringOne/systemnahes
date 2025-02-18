@@ -46,6 +46,7 @@ void game_run()
         if(winner != None || input == 'q' || current_turn >= (CELLS_PER_COL * CELLS_PER_ROW) / 2)
         {
             timer_stop(TIMER0);
+            cell_redraw(selected_cell);
             break;
         }
 
@@ -58,7 +59,7 @@ void game_run()
     }
 
 
-    cursor_moveTo(1, CELLS_PER_COL * cell_height);
+    cursor_moveTo(1, CELLS_PER_COL * cell_height + 1);
     switch(winner)
     {
         case Human:
@@ -86,7 +87,6 @@ void game_onTimeOut()
 void init()
 {
     current_turn = 0;
-    selected_cell = NULL;
     last_marked_human = NULL;
     last_marked_bot = NULL;
     input_init(&input_buf);
