@@ -8,7 +8,6 @@
 
 extern volatile InputBuffer input_buf;
 
-#define min(a, b) a < b ? a : b
 
 void menu_todo()
 {
