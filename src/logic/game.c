@@ -183,27 +183,65 @@ bool checkIfPlayerWon(const Cell *cell, const Player player)
     {
         return false;
     }
-    bool vertical_match = true, horizontal_match = true, diagonal_1_match = true,
-         diagonal_2_match = true;
+    uint8_t row = cell->row, col = cell->col;
+    bool vertical_match = true, horizontal_match = true;
+    uint8_t diagonal_matches_needed = min(CELLS_PER_ROW, CELLS_PER_COL);
+    // start at 1 for the originating field
+    uint8_t diagonal_1_match = 1, diagonal_2_match = 1;
     for(int8_t i = 0; i < (max(CELLS_PER_COL, CELLS_PER_ROW)); i++)
     {
-        if(i < CELLS_PER_COL && cells[i][cell->col].marked_by != player)
+        if(i < CELLS_PER_COL && cells[i][col].marked_by != player)
         {
             vertical_match = false;
         }
-        if(i < CELLS_PER_ROW && cells[cell->row][i].marked_by != player)
+        if(i < CELLS_PER_ROW && cells[row][i].marked_by != player)
         {
             horizontal_match = false;
         }
-        if(i < CELLS_PER_COL && i < CELLS_PER_ROW && cells[i][i].marked_by != player)
+
+        if(i != 0 && row - i >= 0 && row + i < CELLS_PER_ROW
+           && cells[row - i][col + i].marked_by == player)
         {
-            diagonal_1_match = false;
+            diagonal_1_match++;
         }
-        if(i < CELLS_PER_COL && CELLS_PER_ROW - 1 - i > 0
-           && cells[i][CELLS_PER_ROW - 1 - i].marked_by != player)
+
+        if(i != 0 && row + i < CELLS_PER_COL && col - i >= 0
+           && cells[row + i][col - i].marked_by == player)
         {
-            diagonal_2_match = false;
+            diagonal_1_match++;
         }
+
+        if(i != 0 && row - i >= 0 && col - i >= 0 && cells[row - i][col - i].marked_by == player)
+        {
+            diagonal_2_match++;
+        }
+
+        if(i != 0 && row + i < CELLS_PER_COL && row + i < CELLS_PER_ROW
+           && cells[row + i][col + i].marked_by == player)
+        {
+            diagonal_2_match++;
+        }
+        // uint8_t col_offset = (cell->col > cell->row) ? cell->col - cell->row : 0;
+        // uint8_t row_offset = (cell->row > cell->col) ? cell->row - cell->col : 0;
+        // if(i + col_offset < CELLS_PER_ROW && i + row_offset < CELLS_PER_COL
+        //    && cells[i + row_offset][i + col_offset].marked_by == player)
+        // {
+        //     diagonal_1_match++;
+        // }
+        //
+        // col_offset = cell->col + cell->row < CELLS_PER_ROW
+        //     ? CELLS_PER_ROW - 1 - (cell->col + cell->row)
+        //     : 0;
+        // row_offset = cell->col + cell->row < CELLS_PER_COL
+        //     ? CELLS_PER_COL - 1 - (cell->row + (CELLS_PER_ROW - cell->col))
+        //     : 0;
+        // uint8_t col = CELLS_PER_ROW - 1 - (i + col_offset);
+        // if(col < CELLS_PER_ROW && i + row_offset < CELLS_PER_COL
+        //    && cells[i + row_offset][col].marked_by == player)
+        // {
+        //     diagonal_2_match++;
+        // }
     }
-    return vertical_match || horizontal_match || diagonal_1_match || diagonal_2_match;
+    return vertical_match || horizontal_match || diagonal_1_match == diagonal_matches_needed
+        || diagonal_2_match == diagonal_matches_needed;
 }

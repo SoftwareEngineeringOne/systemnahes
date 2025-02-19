@@ -5,7 +5,8 @@
 #ifndef TIME_H
 #define TIME_H
 
-#define TICKS_PER_ROUND 8
+#define TICKS_PER_ROUND 50
+#define TIME_POWER 15
 
 extern volatile int time_sumTicks;
 extern volatile int time_roundTicks;

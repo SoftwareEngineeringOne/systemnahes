@@ -13,7 +13,7 @@ volatile int time_roundTicks = 0;
 
 void time_init()
 {
-    timer_init_detailed(TIMER0, 11, TIMER_MODE_TIMER, TIMER_BIT_MODE_32);
+    timer_init_detailed(TIMER0, TIME_POWER, TIMER_MODE_TIMER, TIMER_BIT_MODE_32);
     timer_captureCompareSet(TIMER0, CC0, 2000, true);
     timer_start(TIMER0);
 }

@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CELLS_PER_ROW 4
+#define CELLS_PER_ROW 8
 #define CELLS_PER_COL 3
 
 #define FIELD_X_OFFSET 1
